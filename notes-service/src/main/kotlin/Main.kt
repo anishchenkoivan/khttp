@@ -1,5 +1,9 @@
 package ru.notes
 
+//import org.khttp.org.khttp.server.KhttpServer
+
 fun main() {
-    println("Notes service started")
+//    val server = KhttpServer()
+//    server.listen(8080)
+    println("Something happened")
 }

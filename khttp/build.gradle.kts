@@ -4,6 +4,8 @@ plugins {
 }
 
 dependencies {
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+    implementation("org.slf4j:slf4j-api:2.0.17")
     testImplementation(kotlin("test"))
 }
 

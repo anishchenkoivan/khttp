@@ -4,7 +4,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":khttp"))
+//    implementation(project(":khttp"))
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.19")
     testImplementation(kotlin("test"))
 }
 
