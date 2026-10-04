@@ -16,7 +16,7 @@ class KhttpServer {
     private val handlerByVersion: Map<HttpVersion, HttpRequestHandler> = mapOf(
         HttpVersion.HTTP_0_9 to Http09Handler()
     )
-    var router: QueryRouter = QueryRouter()
+    val router: QueryRouter = QueryRouter()
 
     fun listen(tcpPort: Int) {
         val serverSocket = ServerSocket(tcpPort)

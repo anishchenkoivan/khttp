@@ -4,7 +4,7 @@ import org.khttp.org.khttp.http.request.HttpRequest
 import org.khttp.org.khttp.http.response.HttpResponseDetails
 import java.io.OutputStream
 
-interface HttpWorker {
+fun interface HttpWorker {
     fun handle(
         httpRequest: HttpRequest,
         responseBodyStream: OutputStream,

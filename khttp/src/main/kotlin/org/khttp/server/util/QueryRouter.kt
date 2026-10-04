@@ -15,8 +15,9 @@ class QueryRouter {
         path: String,
         method: HttpMethod,
         worker: HttpWorker,
-    ) {
+    ): QueryRouter {
         routingTable[RoutingKey(path, method)] = worker
+        return this
     }
 
     fun resolveRoute(

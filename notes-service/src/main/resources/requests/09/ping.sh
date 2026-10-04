@@ -1,0 +1,1 @@
+printf 'GET /ping?a=b&1=2#segment\r\n' | nc localhost 8080
