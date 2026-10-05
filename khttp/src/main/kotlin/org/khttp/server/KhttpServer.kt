@@ -51,8 +51,8 @@ class KhttpServer {
             router = router,
         )
 
-        clientInputStream.close()
-        clientOutputStream.close()
         clientSocket.close()
+        clientOutputStream.close()
+        clientInputStream.close()
     }
 }

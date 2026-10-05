@@ -41,7 +41,7 @@ class Http11Handler: HttpRequestHandler {
             .handle(httpRequest, responseStream)
             .toHttpResponse(responseStream)
 
-        responseWriter.writeResponse(response, responseStream)
+        responseWriter.writeResponse(response, clientOutputStream)
     }
 
     private fun parseHeaders(parser: SocketParser): Map<String, String> {
