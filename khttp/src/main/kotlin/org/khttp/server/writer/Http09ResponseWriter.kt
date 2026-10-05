@@ -7,5 +7,6 @@ class Http09ResponseWriter(): HttpResponseWriter {
     // TODO: Use piped streams
     override fun writeResponse(response: HttpResponse, outputStream: OutputStream) {
         outputStream.write(response.bodyStream.getData())
+        outputStream.write("\r\n".toByteArray())
     }
 }

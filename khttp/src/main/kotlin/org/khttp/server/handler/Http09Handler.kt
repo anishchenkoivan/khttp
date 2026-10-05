@@ -8,6 +8,7 @@ import org.khttp.org.khttp.http.request.Http09Request
 import org.khttp.org.khttp.http.response.toHttpResponse
 import org.khttp.org.khttp.server.util.HttpUriParser
 import org.khttp.org.khttp.server.util.QueryRouter
+import org.khttp.org.khttp.server.util.SocketParser
 import org.khttp.org.khttp.server.writer.Http09ResponseWriter
 import org.khttp.org.khttp.stream.HttpResponseStream
 import java.io.InputStream
@@ -19,7 +20,7 @@ class Http09Handler: HttpRequestHandler {
     private val responseWriter = Http09ResponseWriter()
 
     override fun handleRequest(
-        clientConnectionStream: InputStream,
+        clientConnectionStreamParser: SocketParser,
         clientOutputStream: OutputStream,
         initialData: HttpRequestInitialData,
         router: QueryRouter

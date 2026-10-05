@@ -3,9 +3,11 @@ package org.khttp.org.khttp.server
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.khttp.org.khttp.http.HttpVersion
 import org.khttp.org.khttp.server.handler.Http09Handler
+import org.khttp.org.khttp.server.handler.Http11Handler
 import org.khttp.org.khttp.server.handler.HttpRequestHandler
 import org.khttp.org.khttp.server.util.HttpRequestDataExtractor
 import org.khttp.org.khttp.server.util.QueryRouter
+import org.khttp.org.khttp.server.util.parser.ScannerSocketParser
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -13,8 +15,11 @@ private val logger = KotlinLogging.logger {}
 
 class KhttpServer {
     private var isActive = false
+
+    // TODO: Add associateBy
     private val handlerByVersion: Map<HttpVersion, HttpRequestHandler> = mapOf(
-        HttpVersion.HTTP_0_9 to Http09Handler()
+        HttpVersion.HTTP_0_9 to Http09Handler(),
+        HttpVersion.HTTP_1_1 to Http11Handler()
     )
     val router: QueryRouter = QueryRouter()
 
@@ -33,12 +38,14 @@ class KhttpServer {
     }
 
     fun handleClientConnection(clientSocket: Socket) {
+        logger.info {"Handling client connection"}
         val clientInputStream = clientSocket.getInputStream()
         val clientOutputStream = clientSocket.getOutputStream()
+        val clientInputStreamParser = ScannerSocketParser(clientInputStream)
 
-        val initialRequestData = HttpRequestDataExtractor.getRequestData(clientInputStream)
+        val initialRequestData = HttpRequestDataExtractor.getRequestData(clientInputStreamParser)
         handlerByVersion[initialRequestData.httpVersion]?.handleRequest(
-            clientConnectionStream = clientInputStream,
+            clientConnectionStreamParser = clientInputStreamParser,
             clientOutputStream = clientOutputStream,
             initialData = initialRequestData,
             router = router,

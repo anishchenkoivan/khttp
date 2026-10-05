@@ -8,5 +8,5 @@ interface HttpRequest {
     val method: HttpMethod
     val uri: HttpUri
     val headers: Map<String, String>
-    val body: InputStream
+    val body: String
 }

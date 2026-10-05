@@ -14,9 +14,9 @@ fun main() {
             path = "/ping",
             method = HttpMethod.GET,
             worker = { httpRequest: HttpRequest, responseBodyStream: OutputStream ->
-                val body = httpRequest.body.readAllBytes()
+                val body = httpRequest.body
                 responseBodyStream.write("Success\nBody:\n".toByteArray())
-                responseBodyStream.write(body)
+                responseBodyStream.write(body.toByteArray())
                 responseBodyStream.write("\nQuery Params:\n".toByteArray())
                 responseBodyStream.write(httpRequest.uri.queryParams.toString().toByteArray())
                 responseBodyStream.write("\nFragment:\n".toByteArray())
