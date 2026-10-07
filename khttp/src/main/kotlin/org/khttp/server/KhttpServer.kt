@@ -7,7 +7,6 @@ import org.khttp.org.khttp.server.handler.Http11Handler
 import org.khttp.org.khttp.server.handler.HttpRequestHandler
 import org.khttp.org.khttp.server.util.HttpRequestDataExtractor
 import org.khttp.org.khttp.server.util.QueryRouter
-import org.khttp.org.khttp.server.util.parser.ScannerSocketParser
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -39,13 +38,12 @@ class KhttpServer {
 
     fun handleClientConnection(clientSocket: Socket) {
         logger.info {"Handling client connection"}
-        val clientInputStream = clientSocket.getInputStream()
+        val clientInputStreamReader = clientSocket.getInputStream().bufferedReader()
         val clientOutputStream = clientSocket.getOutputStream()
-        val clientInputStreamParser = ScannerSocketParser(clientInputStream)
 
-        val initialRequestData = HttpRequestDataExtractor.getRequestData(clientInputStreamParser)
+        val initialRequestData = HttpRequestDataExtractor.getRequestData(clientInputStreamReader)
         handlerByVersion[initialRequestData.httpVersion]?.handleRequest(
-            clientConnectionStreamParser = clientInputStreamParser,
+            clientConnectionReader = clientInputStreamReader,
             clientOutputStream = clientOutputStream,
             initialData = initialRequestData,
             router = router,
@@ -53,6 +51,6 @@ class KhttpServer {
 
         clientSocket.close()
         clientOutputStream.close()
-        clientInputStream.close()
+        clientInputStreamReader.close()
     }
 }

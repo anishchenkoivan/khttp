@@ -7,9 +7,9 @@ import org.khttp.org.khttp.http.request.KHttpRequest
 import org.khttp.org.khttp.http.response.toHttpResponse
 import org.khttp.org.khttp.server.util.HttpUriParser
 import org.khttp.org.khttp.server.util.QueryRouter
-import org.khttp.org.khttp.server.util.SocketParser
 import org.khttp.org.khttp.server.writer.Http11ResponseWriter
 import org.khttp.org.khttp.stream.HttpResponseStream
+import java.io.BufferedReader
 import java.io.OutputStream
 
 private val logger = KotlinLogging.logger {}
@@ -20,20 +20,20 @@ class Http11Handler: HttpRequestHandler {
     private val responseWriter = Http11ResponseWriter()
 
     override fun handleRequest(
-        clientConnectionStreamParser: SocketParser,
+        clientConnectionReader: BufferedReader,
         clientOutputStream: OutputStream,
         initialData: HttpRequestInitialData,
         router: QueryRouter
     ) {
         logger.info { "Handling HTTP/1.1 request" }
         val uriData = HttpUriParser.parse(initialData.uri!!)
-        val headers = parseHeaders(clientConnectionStreamParser)
+        val headers = getHeaders(clientConnectionReader)
         val contentLength = headers["Content-Length"]?.toInt()
         val httpRequest = KHttpRequest(
             method = initialData.method!!,
             uri = uriData,
             headers = headers,
-            body = parseBody(clientConnectionStreamParser, contentLength)
+            body = parseStaticBody(clientConnectionReader, contentLength)
         )
 
         val responseStream = HttpResponseStream()
@@ -44,11 +44,9 @@ class Http11Handler: HttpRequestHandler {
         responseWriter.writeResponse(response, clientOutputStream)
     }
 
-    private fun parseHeaders(parser: SocketParser): Map<String, String> {
+    private fun getHeaders(reader: BufferedReader): Map<String, String> {
         val headers = mutableMapOf<String, String>()
-        val headersSection = if (parser.hasNextSection()) {
-            parser.nextSection()
-        } else { "" }
+        val headersSection = parseHeaders(reader)
 
         if (headersSection.isNotEmpty()) {
             headersSection.split("\n").forEach { line ->
@@ -61,10 +59,21 @@ class Http11Handler: HttpRequestHandler {
         return headers
     }
 
-    fun parseBody(parser: SocketParser, size: Int?): String {
-        if (size == null || size == 0) return ""
-        return if (parser.hasNextSection()) {
-            parser.nextSection()
-        } else { "" }
+    // TODO: Move it to the getHeaders fun
+    private fun parseHeaders(clientConnectionReader: BufferedReader): String {
+        val headersLine = StringBuilder()
+        while (true) {
+            val line = clientConnectionReader.readLine()
+            if (line.isEmpty()) break
+            headersLine.append(line)
+        }
+        return headersLine.toString()
+    }
+
+    // TODO: Support chunked encoding
+    fun parseStaticBody(reader: BufferedReader, size: Int?): String {
+        val buffer = CharArray(size ?: 0)
+        reader.read(buffer)
+        return String(buffer)
     }
 }
