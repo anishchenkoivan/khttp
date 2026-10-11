@@ -1,4 +1,4 @@
-package org.khttp.org.khttp.http
+package org.khttp.http
 
 data class HttpRequestInitialData(
     val httpVersion: HttpVersion,

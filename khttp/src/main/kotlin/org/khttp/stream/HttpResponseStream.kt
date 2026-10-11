@@ -1,4 +1,4 @@
-package org.khttp.org.khttp.stream
+package org.khttp.stream
 
 import java.io.OutputStream
 

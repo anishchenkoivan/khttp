@@ -1,8 +1,8 @@
-package org.khttp.org.khttp.server.handler
+package org.khttp.server.handler
 
-import org.khttp.org.khttp.http.HttpRequestInitialData
-import org.khttp.org.khttp.http.HttpVersion
-import org.khttp.org.khttp.server.util.QueryRouter
+import org.khttp.http.HttpRequestInitialData
+import org.khttp.http.HttpVersion
+import org.khttp.server.util.QueryRouter
 import java.io.BufferedReader
 import java.io.OutputStream
 

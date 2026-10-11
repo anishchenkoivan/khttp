@@ -1,14 +1,14 @@
-package org.khttp.org.khttp.server.handler
+package org.khttp.server.handler
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.khttp.org.khttp.http.HttpRequestInitialData
-import org.khttp.org.khttp.http.HttpVersion
-import org.khttp.org.khttp.http.request.KHttpRequest
-import org.khttp.org.khttp.http.response.toHttpResponse
-import org.khttp.org.khttp.server.util.HttpUriParser
-import org.khttp.org.khttp.server.util.QueryRouter
-import org.khttp.org.khttp.server.writer.Http11ResponseWriter
-import org.khttp.org.khttp.stream.HttpResponseStream
+import org.khttp.http.HttpRequestInitialData
+import org.khttp.http.HttpVersion
+import org.khttp.http.request.KHttpRequest
+import org.khttp.http.response.toHttpResponse
+import org.khttp.server.util.HttpUriParser
+import org.khttp.server.util.QueryRouter
+import org.khttp.server.writer.Http11ResponseWriter
+import org.khttp.stream.HttpResponseStream
 import java.io.BufferedReader
 import java.io.OutputStream
 

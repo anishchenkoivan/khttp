@@ -1,8 +1,8 @@
-package org.khttp.org.khttp.server.writer
+package org.khttp.server.writer
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.khttp.org.khttp.http.HttpVersion
-import org.khttp.org.khttp.http.response.HttpResponse
+import org.khttp.http.HttpVersion
+import org.khttp.http.response.HttpResponse
 import java.io.OutputStream
 
 val logger = KotlinLogging.logger {}

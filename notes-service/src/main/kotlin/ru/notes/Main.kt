@@ -1,10 +1,10 @@
 package ru.notes
 
-import org.khttp.org.khttp.http.HttpMethod
-import org.khttp.org.khttp.http.HttpStatus
-import org.khttp.org.khttp.http.request.HttpRequest
-import org.khttp.org.khttp.http.response.HttpResponseDetails
-import org.khttp.org.khttp.server.KhttpServer
+import org.khttp.http.HttpMethod
+import org.khttp.http.HttpStatus
+import org.khttp.http.request.HttpRequest
+import org.khttp.http.response.HttpResponseDetails
+import org.khttp.server.KhttpServer
 import java.io.OutputStream
 
 fun main() {

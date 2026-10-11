@@ -1,7 +1,7 @@
-package org.khttp.org.khttp.server.util
+package org.khttp.server.util
 
-import org.khttp.org.khttp.handler.HttpWorker
-import org.khttp.org.khttp.http.HttpMethod
+import org.khttp.handler.HttpWorker
+import org.khttp.http.HttpMethod
 
 private data class RoutingKey(
     val path: String,

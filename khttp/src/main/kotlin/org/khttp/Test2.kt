@@ -1,3 +1,4 @@
 package org.khttp
 
-object KHttp
+class Test2 {
+}

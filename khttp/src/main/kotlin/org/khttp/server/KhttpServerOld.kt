@@ -1,4 +1,4 @@
-package org.khttp.org.khttp.server
+package org.khttp.server
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.OutputStream

@@ -1,9 +1,9 @@
-package org.khttp.org.khttp.server.util
+package org.khttp.server.util
 
-import org.khttp.org.khttp.http.HttpMethod
-import org.khttp.org.khttp.http.HttpRequestInitialData
-import org.khttp.org.khttp.http.HttpVersion
-import org.khttp.org.khttp.http.httpVersionFromString
+import org.khttp.http.HttpMethod
+import org.khttp.http.HttpRequestInitialData
+import org.khttp.http.HttpVersion
+import org.khttp.http.httpVersionFromString
 import java.io.BufferedReader
 
 object HttpRequestDataExtractor {
@@ -16,6 +16,7 @@ object HttpRequestDataExtractor {
 
         // TODO: Add proper version detection
         val version = when {
+            line.contentEquals(HTTP_2_0_MAGIC) -> HttpVersion.HTTP_2_0
             segments.size < 3 -> HttpVersion.HTTP_0_9
             else -> httpVersionFromString(segments[2])!!
         }

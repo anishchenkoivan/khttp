@@ -3,7 +3,6 @@ plugins {
 }
 
 allprojects {
-    group = "org.khttp"
     version = "1.0-SNAPSHOT"
 
     repositories {

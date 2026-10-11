@@ -1,6 +1,6 @@
-package org.khttp.org.khttp.server.util
+package org.khttp.server.util
 
-import org.khttp.org.khttp.http.HttpUri
+import org.khttp.http.HttpUri
 
 object HttpUriParser {
     fun parse(uri: String): HttpUri {

@@ -1,4 +1,4 @@
-package org.khttp.org.khttp.http
+package org.khttp.http
 
 enum class HttpVersion(val value: String) {
     HTTP_0_9("HTTP/0.9"),

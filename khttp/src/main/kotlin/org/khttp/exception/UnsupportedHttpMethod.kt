@@ -1,4 +1,4 @@
-package org.khttp.org.khttp.exception
+package org.khttp.exception
 
 class UnsupportedHttpMethod(
     override val message: String?
