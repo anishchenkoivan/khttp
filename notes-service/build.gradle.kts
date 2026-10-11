@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(":khttp"))
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
     runtimeOnly("ch.qos.logback:logback-classic:1.6.5")
     testImplementation(kotlin("test"))
 }

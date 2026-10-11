@@ -1,0 +1,192 @@
+openapi: 3.1.0
+info:
+  title: Notes Service
+  description: Notes taking service
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081
+paths:
+  /notes:
+    get:
+      summary: Find a note by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The note
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+    post:
+      summary: Create a note
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+      responses:
+        '200':
+          description: The created note
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+    put:
+      summary: Update a note by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+      responses:
+        '200':
+          description: The updated note
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+    delete:
+      summary: Delete a note by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Note deleted
+  /collections:
+    get:
+      summary: Find a collection by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The collection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotesCollection'
+    post:
+      summary: Create a collection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotesCollection'
+      responses:
+        '200':
+          description: The created collection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotesCollection'
+    put:
+      summary: Update a collection by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotesCollectionUpdate'
+      responses:
+        '200':
+          description: The updated collection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotesCollection'
+    delete:
+      summary: Delete a collection by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Collection deleted
+  /ping:
+    get:
+      summary: Echo request body and query params
+      responses:
+        '200':
+          description: Success
+
+components:
+  schemas:
+    Note:
+      type: object
+      required:
+        - id
+        - title
+        - content
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        content:
+          type: string
+    NotesCollection:
+      type: object
+      required:
+        - id
+        - title
+        - notes
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+    NotesCollectionUpdate:
+      type: object
+      required:
+        - title
+        - notes
+      properties:
+        title:
+          type: string
+        notes:
+          type: array
+          items:
+            type: string
+            format: uuid
