@@ -1,0 +1,6 @@
+### Create a note (chunked transfer-encoded body)
+POST http://localhost:8081/notes
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{"title":"Example note","content":"Note content sent with chunked transfer encoding"}
