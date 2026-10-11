@@ -6,4 +6,5 @@ import java.util.UUID
 interface NotesRepository {
     fun findById(id: UUID): Note?
     fun save(note: Note): Note
+    fun delete(id: UUID)
 }

@@ -3,7 +3,7 @@ package ru.notes.controller.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.UUID
 
-data class NotesCollectionUpdateDto(
+data class NotesCollectionUpdateRequest(
     @param:JsonProperty("title")
     val title: String,
 

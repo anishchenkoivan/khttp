@@ -14,4 +14,8 @@ class InMemoryNotesCollectionsRepository: NotesCollectionsRepository {
         collections[collection.id] = collection
         return collection
     }
+
+    override fun delete(id: UUID) {
+        collections.remove(id)
+    }
 }

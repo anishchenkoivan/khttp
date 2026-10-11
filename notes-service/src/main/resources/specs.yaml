@@ -30,7 +30,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Note'
+              $ref: '#/components/schemas/NoteUpdateRequest'
       responses:
         '200':
           description: The created note
@@ -52,7 +52,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Note'
+              $ref: '#/components/schemas/NoteUpdateRequest'
       responses:
         '200':
           description: The updated note
@@ -96,7 +96,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NotesCollection'
+              $ref: '#/components/schemas/NotesCollectionUpdateRequest'
       responses:
         '200':
           description: The created collection
@@ -118,7 +118,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NotesCollectionUpdate'
+              $ref: '#/components/schemas/NotesCollectionUpdateRequest'
       responses:
         '200':
           description: The updated collection
@@ -177,7 +177,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Note'
-    NotesCollectionUpdate:
+    NoteUpdateRequest:
+      type: object
+      required:
+        - title
+        - content
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+    NotesCollectionUpdateRequest:
       type: object
       required:
         - title

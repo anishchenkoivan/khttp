@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import ru.notes.controller.dto.Json
 import ru.notes.controller.dto.NoteDto
 import ru.notes.controller.dto.NotesCollectionDto
-import ru.notes.controller.dto.NotesCollectionUpdateDto
+import ru.notes.controller.dto.NotesCollectionUpdateRequest
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -67,7 +67,7 @@ class NotesServiceTest {
         val collection = NotesCollectionDto(UUID.randomUUID(), "Collection title", emptyList())
         post("/collections", collection)
 
-        val update = NotesCollectionUpdateDto("Updated collection title", listOf(note.id))
+        val update = NotesCollectionUpdateRequest("Updated collection title", listOf(note.id))
         assertEquals(200, put("/collections?id=${collection.id}", update).statusCode())
 
         val found = get("/collections?id=${collection.id}").bodyAsCollection()
