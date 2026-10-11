@@ -5,21 +5,21 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import ru.notes.controller.dto.Json
 import ru.notes.controller.dto.NoteDto
+import ru.notes.controller.dto.NoteUpdateRequest
 import ru.notes.controller.dto.NotesCollectionDto
 import ru.notes.controller.dto.NotesCollectionUpdateRequest
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.util.UUID
 
 class NotesServiceTest {
 
     @Test
     fun `should create and find the note`() {
-        val note = NoteDto(UUID.randomUUID(), "Note title", "Note content")
-
-        assertEquals(200, post("/notes", note).statusCode())
+        val createdResponse = post("/notes", NoteUpdateRequest("Note title", "Note content"))
+        assertEquals(201, createdResponse.statusCode())
+        val note = createdResponse.bodyAsNote()
 
         val found = get("/notes?id=${note.id}")
         assertEquals(200, found.statusCode())
@@ -28,11 +28,10 @@ class NotesServiceTest {
 
     @Test
     fun `should update the note`() {
-        val note = NoteDto(UUID.randomUUID(), "Note title", "Note content")
-        post("/notes", note)
+        val note = post("/notes", NoteUpdateRequest("Note title", "Note content")).bodyAsNote()
 
         val updated = NoteDto(note.id, "Updated note title", "Updated note content")
-        assertEquals(200, put("/notes?id=${note.id}", updated).statusCode())
+        assertEquals(200, put("/notes?id=${note.id}", NoteUpdateRequest("Updated note title", "Updated note content")).statusCode())
 
         val found = get("/notes?id=${note.id}")
         assertEquals(updated, found.bodyAsNote())
@@ -40,8 +39,7 @@ class NotesServiceTest {
 
     @Test
     fun `should delete the note`() {
-        val note = NoteDto(UUID.randomUUID(), "Note title", "Note content")
-        post("/notes", note)
+        val note = post("/notes", NoteUpdateRequest("Note title", "Note content")).bodyAsNote()
 
         assertEquals(200, delete("/notes?id=${note.id}").statusCode())
         assertEquals(404, get("/notes?id=${note.id}").statusCode())
@@ -49,10 +47,11 @@ class NotesServiceTest {
 
     @Test
     fun `should create and find the collection`() {
-        val note = NoteDto(UUID.randomUUID(), "Note title", "Note content")
-        val collection = NotesCollectionDto(UUID.randomUUID(), "Collection title", listOf(note))
+        val note = post("/notes", NoteUpdateRequest("Note title", "Note content")).bodyAsNote()
 
-        assertEquals(200, post("/collections", collection).statusCode())
+        val createdResponse = post("/collections", NotesCollectionUpdateRequest("Collection title", listOf(note.id)))
+        assertEquals(201, createdResponse.statusCode())
+        val collection = createdResponse.bodyAsCollection()
 
         val found = get("/collections?id=${collection.id}")
         assertEquals(200, found.statusCode())
@@ -61,11 +60,9 @@ class NotesServiceTest {
 
     @Test
     fun `should update the collection`() {
-        val note = NoteDto(UUID.randomUUID(), "Note title", "Note content")
-        post("/notes", note)
+        val note = post("/notes", NoteUpdateRequest("Note title", "Note content")).bodyAsNote()
 
-        val collection = NotesCollectionDto(UUID.randomUUID(), "Collection title", emptyList())
-        post("/collections", collection)
+        val collection = post("/collections", NotesCollectionUpdateRequest("Collection title", emptyList())).bodyAsCollection()
 
         val update = NotesCollectionUpdateRequest("Updated collection title", listOf(note.id))
         assertEquals(200, put("/collections?id=${collection.id}", update).statusCode())
@@ -77,8 +74,7 @@ class NotesServiceTest {
 
     @Test
     fun `should delete the collection`() {
-        val collection = NotesCollectionDto(UUID.randomUUID(), "Collection title", emptyList())
-        post("/collections", collection)
+        val collection = post("/collections", NotesCollectionUpdateRequest("Collection title", emptyList())).bodyAsCollection()
 
         assertEquals(200, delete("/collections?id=${collection.id}").statusCode())
         assertEquals(404, get("/collections?id=${collection.id}").statusCode())

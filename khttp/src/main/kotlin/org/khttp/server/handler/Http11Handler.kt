@@ -65,7 +65,7 @@ class Http11Handler: HttpRequestHandler {
         while (true) {
             val line = clientConnectionReader.readLine()
             if (line.isEmpty()) break
-            headersLine.append(line)
+            headersLine.appendLine(line)
         }
         return headersLine.toString()
     }

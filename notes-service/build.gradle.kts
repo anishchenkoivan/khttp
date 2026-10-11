@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(":khttp"))
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
     runtimeOnly("ch.qos.logback:logback-classic:1.6.5")
     testImplementation(kotlin("test"))

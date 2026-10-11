@@ -1,5 +1,6 @@
 package ru.notes.controller
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.khttp.http.HttpStatus
 import org.khttp.http.request.HttpRequest
 import org.khttp.http.response.HttpResponseDetails
@@ -18,16 +19,20 @@ class NotesController(
     val notesRepository: NotesRepository,
     val collectionsRepository: NotesCollectionsRepository,
 ) {
+    private val logger = KotlinLogging.logger {}
     private val mapper = Json.mapper
 
     fun findNote(httpRequest: HttpRequest, responseBodyStream: OutputStream): HttpResponseDetails {
-        val note = notesRepository.findById(UUID.fromString(httpRequest.uri.queryParams["id"] ?: ""))
+        val id = UUID.fromString(httpRequest.uri.queryParams["id"] ?: "")
+        val note = notesRepository.findById(id)
         return if (note == null) {
+            logger.warn { "Note with id=$id not found" }
             HttpResponseDetails(
                 statusCode = HttpStatus.NOT_FOUND,
                 headers = mapOf()
             )
         } else {
+            logger.info { "Found Note with id=$id" }
             mapper.writeValue(responseBodyStream, note.toDto())
             HttpResponseDetails(
                 statusCode = HttpStatus.OK,
@@ -47,6 +52,7 @@ class NotesController(
         )
         // Don't check if it exists
         notesRepository.save(note)
+        logger.info { "Created Note with id=${note.id}" }
         mapper.writeValue(responseBodyStream, note.toDto())
         return HttpResponseDetails(
             statusCode = HttpStatus.CREATED,
@@ -57,14 +63,17 @@ class NotesController(
     }
 
     fun deleteNote(httpRequest: HttpRequest, responseBodyStream: OutputStream): HttpResponseDetails {
-        val note = notesRepository.findById(UUID.fromString(httpRequest.uri.queryParams["id"] ?: ""))
+        val id = UUID.fromString(httpRequest.uri.queryParams["id"] ?: "")
+        val note = notesRepository.findById(id)
         return if (note == null) {
+            logger.warn { "Note with id=$id not found" }
             HttpResponseDetails(
                 statusCode = HttpStatus.NOT_FOUND,
                 headers = mapOf()
             )
         } else {
             notesRepository.delete(note.id)
+            logger.info { "Deleted Note with id=${note.id}" }
             HttpResponseDetails(
                 statusCode = HttpStatus.OK,
                 headers = mapOf()
@@ -74,8 +83,10 @@ class NotesController(
 
     fun updateNote(httpRequest: HttpRequest, responseBodyStream: OutputStream): HttpResponseDetails {
         val request: NoteUpdateRequest = mapper.readValue(httpRequest.body, NoteUpdateRequest::class.java)
-        val note = notesRepository.findById(UUID.fromString(httpRequest.uri.queryParams["id"] ?: ""))
+        val id = UUID.fromString(httpRequest.uri.queryParams["id"] ?: "")
+        val note = notesRepository.findById(id)
         if (note == null) {
+            logger.warn { "Note with id=$id not found" }
             return HttpResponseDetails(
                 statusCode = HttpStatus.NOT_FOUND,
                 headers = mapOf()
@@ -86,6 +97,7 @@ class NotesController(
             content = request.content,
         )
         notesRepository.save(updatedNote)
+        logger.info { "Updated Note with id=${updatedNote.id}" }
         mapper.writeValue(responseBodyStream, updatedNote.toDto())
         return HttpResponseDetails(
             statusCode = HttpStatus.OK,
@@ -94,13 +106,16 @@ class NotesController(
     }
 
     fun findCollection(httpRequest: HttpRequest, responseBodyStream: OutputStream): HttpResponseDetails {
-        val collection = collectionsRepository.findById(UUID.fromString(httpRequest.uri.queryParams["id"] ?: ""))
+        val id = UUID.fromString(httpRequest.uri.queryParams["id"] ?: "")
+        val collection = collectionsRepository.findById(id)
         return if (collection == null) {
+            logger.warn { "Collection with id=$id not found" }
             HttpResponseDetails(
                 statusCode = HttpStatus.NOT_FOUND,
                 headers = mapOf()
             )
         } else {
+            logger.info { "Found Collection with id=$id" }
             mapper.writeValue(responseBodyStream, collection.toDto())
             HttpResponseDetails(
                 statusCode = HttpStatus.OK,
@@ -119,6 +134,7 @@ class NotesController(
             notes = request.notes.mapNotNull { notesRepository.findById(it) },
         )
         collectionsRepository.save(collection)
+        logger.info { "Created Collection with id=${collection.id}" }
         mapper.writeValue(responseBodyStream, collection.toDto())
         return HttpResponseDetails(
             statusCode = HttpStatus.CREATED,
@@ -129,14 +145,17 @@ class NotesController(
     }
 
     fun deleteCollection(httpRequest: HttpRequest, responseBodyStream: OutputStream): HttpResponseDetails {
-        val collection = collectionsRepository.findById(UUID.fromString(httpRequest.uri.queryParams["id"] ?: ""))
+        val id = UUID.fromString(httpRequest.uri.queryParams["id"] ?: "")
+        val collection = collectionsRepository.findById(id)
         return if (collection == null) {
+            logger.warn { "Collection with id=$id not found" }
             HttpResponseDetails(
                 statusCode = HttpStatus.NOT_FOUND,
                 headers = mapOf()
             )
         } else {
             collectionsRepository.delete(collection.id)
+            logger.info { "Deleted Collection with id=${collection.id}" }
             HttpResponseDetails(
                 statusCode = HttpStatus.OK,
                 headers = mapOf()
@@ -146,8 +165,10 @@ class NotesController(
 
     fun updateCollection(httpRequest: HttpRequest, responseBodyStream: OutputStream): HttpResponseDetails {
         val request: NotesCollectionUpdateRequest = mapper.readValue(httpRequest.body, NotesCollectionUpdateRequest::class.java)
-        val collection = collectionsRepository.findById(UUID.fromString(httpRequest.uri.queryParams["id"] ?: ""))
+        val id = UUID.fromString(httpRequest.uri.queryParams["id"] ?: "")
+        val collection = collectionsRepository.findById(id)
         if (collection == null) {
+            logger.warn { "Collection with id=$id not found" }
             return HttpResponseDetails(
                 statusCode = HttpStatus.NOT_FOUND,
                 headers = mapOf()
@@ -158,6 +179,7 @@ class NotesController(
             notes = request.notes.mapNotNull { notesRepository.findById(it) },
         )
         collectionsRepository.save(updatedCollection)
+        logger.info { "Updated Collection with id=${updatedCollection.id}" }
         mapper.writeValue(responseBodyStream, updatedCollection.toDto())
         return HttpResponseDetails(
             statusCode = HttpStatus.OK,

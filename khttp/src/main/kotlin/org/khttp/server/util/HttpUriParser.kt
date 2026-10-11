@@ -1,6 +1,7 @@
 package org.khttp.server.util
 
 import org.khttp.http.HttpUri
+import kotlin.math.min
 
 object HttpUriParser {
     fun parse(uri: String): HttpUri {
@@ -9,7 +10,8 @@ object HttpUriParser {
 
         val fragment = uri.substring(fragmentDelimiterIndex)
         val path = uri.substring(0, queryParamsDelimiterIndex)
-        val queryParams: Map<String, String> = uri.substring(queryParamsDelimiterIndex, fragmentDelimiterIndex)
+        val queryParams: Map<String, String> = uri
+            .substring(min(queryParamsDelimiterIndex + 1, fragmentDelimiterIndex), fragmentDelimiterIndex)
             .takeIf{ it.isNotEmpty() }
             ?.split("&")
             ?.mapNotNull { param ->
